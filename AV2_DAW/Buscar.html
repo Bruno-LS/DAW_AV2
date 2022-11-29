@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+            function buscarCarro() {
+                let nome = String.prototype.toUpperCase(document.getElementById("nome").value); //Pegando maiusculo
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let obj = JSON.parse(this.responseText);
+                        let x = 0;
+
+                        let valor = (obj[x].local).localeCompare("undefined");
+                        if (valor != 0) {
+                            for (x = 0; x < obj.length; x++) {
+                                let linha = obj[x];
+                                criarTabela(linha);
+                            }
+                        }
+                    }
+                }
+
+                xmlHttp.open("GET", "http://localhost/DAW/AV2_DAW/listar.php?nome=" + nome);
+                xmlHttp.send();
+            }
+
+            function criarTabela(linha) {
+                let tabela = document.getElementById("tabela");
+                let tr = document.createElement("tr");
+
+                let tdnome = document.createElement("td");
+                let buttonNome = document.createElement("button");
+                buttonNome.setAttribute("onclick", "dados(linha);");
+                textnode = document.createTextNode(linha.nome);
+                buttonNome = appendChild(textnode);
+                tdnome.appendChild(buttonNome);
+                tr.appendChild(tdnome);
+
+                let tdcategoria = document.createElement("td");
+                textnode = document.createTextNode(linha.categoria);
+                tdcategoria.appendChild(textnode);
+                tr.appendChild(tdcategoria);
+
+                let tdpreco = document.createElement("td");
+                textnode = document.createTextNode(linha.preco);
+                tdpreco.appendChild(textnode);
+                tr.appendChild(tdpreco);
+
+                let tdtempo = document.createElement("td");
+                textnode = document.createTextNode(linha.tempo);
+                tdtempo.appendChild(textnode);
+                tr.appendChild(tdtempo);
+
+                let tdcidade = document.createElement("td");
+                textnode = document.createTextNode(linha.cidade);
+                tdcidade.appendChild(textnode);
+                tr.appendChild(tdcidade);
+
+                tabela.appendChild(tr);
+            }   
+    </script>
+    <title>Aluguel de carrros</title>
+</head>
+<body>
+    <section>
+        <a href="Buscar.html">Buscar Carro</a>
+        <a href="Listar.html">Listar Carros</a>
+        <!-- <a href=".html"></a>
+        <a href=".html"></a> -->
+    </section>
+    <section>
+        <form>
+            <fieldset>
+                <h2>Procurar Pelo Nome do Carro</h2>
+                <input type="text" id="nome">
+                <input type="button" value="Enviar" onclick="buscarCarro();">
+            </fieldset>
+        </form>
+    </section>
+
+    <table>
+        <div id="tabela"></div>
+
+    </table>
+</body>
+</html>

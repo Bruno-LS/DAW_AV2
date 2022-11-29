@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <script>
+        function enviarForm() {
+                let tempo = document.getElementsByName("tempo").value;
+                let categoria = document.getElementsByName("Categoria").value;
+                let preco = document.getElementById("preco").value;
+                let cidade = document.getElementById("cidade").value;
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let obj = JSON.parse(this.responseText);
+                        let x = 0;
+
+                        let valor = (obj[x].local).localeCompare("undefined");
+                        if (valor != 0) {
+                            for (x = 0; x < obj.length; x++) {
+                                let linha = obj[x];
+                                criarTabela(linha);
+                            }
+                        }
+                    }
+                }
+
+                xmlHttp.open("GET", "http://localhost/DAW/AV2_DAW/listar.php?tempo=" + tempo + "&categoria=" + categoria
+                + "&preco=" + preco + "&cidade=" + cidade);
+                xmlHttp.send();
+                location.reload();
+            }
+
+            function criarTabela(linha) {
+                let tabela = document.getElementById("tabela");
+                let tr = document.createElement("tr");
+
+                let tdnome = document.createElement("td");
+                let buttonNome = document.createElement("button");
+                buttonNome.setAttribute("onclick", "dados(linha);");
+                textnode = document.createTextNode(linha.nome);
+                buttonNome = appendChild(textnode);
+                tdnome.appendChild(buttonNome);
+                tr.appendChild(tdnome);
+
+                let tdcategoria = document.createElement("td");
+                textnode = document.createTextNode(linha.categoria);
+                tdcategoria.appendChild(textnode);
+                tr.appendChild(tdcategoria);
+
+                let tdpreco = document.createElement("td");
+                textnode = document.createTextNode(linha.preco);
+                tdpreco.appendChild(textnode);
+                tr.appendChild(tdpreco);
+
+                let tdtempo = document.createElement("td");
+                textnode = document.createTextNode(linha.tempo);
+                tdtempo.appendChild(textnode);
+                tr.appendChild(tdtempo);
+
+                let tdcidade = document.createElement("td");
+                textnode = document.createTextNode(linha.cidade);
+                tdcidade.appendChild(textnode);
+                tr.appendChild(tdcidade);
+
+                tabela.appendChild(tr);
+                // let input = document.getElementById("nome");
+                // input.setAttribute("onclick", "location.reload();");
+            }
+    </script>
+        <title>Aluguel de carrros</title>
+    </head>
+    <body>
+
+        <section>
+            <a href="Buscar.html">Buscar Carro</a>
+            <a href="Listar.html">Listar Carros</a>
+            <!-- <a href=".html"></a>
+        <a href=".html"></a> -->
+        </section>
+        <section>
+            <form>
+                <h2>Selecione As Opções</h2>
+                <fieldset>
+                    <h4>Quantidade de Tempo para Alugar</h4>
+                    <input type="radio" name="tempo" id="7">
+                    <label for="7">7 dias</label>
+                    <br>
+                    <input type="radio" name="tempo" id="15">
+                    <label for="15">15 dias</label>
+                    <br>
+                    <input type="radio" name="tempo" id="30">
+                    <label for="30">30 dias</label>
+                    <br>
+                    <br>
+                </fieldset>
+                <fieldset>
+                    <h4>Categoria dos Carros</h4>
+                    <input type="radio" name="Categoria" id="Hatch">
+                    <label for="Hatch">Hatch</label>
+                    <br>
+                    <input type="radio" name="Categoria" id="sedan">
+                    <label for="sedan">sedan</label>
+                    <br>
+                    <input type="radio" name="Categoria" id="Picape">
+                    <label for="Picape">Picape</label>
+                    <br>
+                    <input type="radio" name="Categoria" id="SUV">
+                    <label for="SUV">SUV</label>
+                </fieldset>
+                <fieldset>
+                    <h4>Cidade desejada</h4>
+                    <input type="text" placeholder="Escolha a cidade" id="cidade" list="cidades">
+                    <datalist id="cidades">
+                        <option>Rio de Janeiro</option>
+                        <option>Santos</option>
+                        <option>Niterói</option>
+                        <option>Salvador</option>
+                    </datalist>
+
+
+                </fieldset>
+                <fieldset>
+                    <h4>Selecione a Faixa de Preço</h4>
+                    <input type="range" id="preco" min="300" max="1000">
+                </fieldset>
+                <input type="button" value="Enviar" onclick="enviarForm();">
+            </form>
+        </section>
+        <div id="tabela"></div>
+
+    </body>
+</html>
